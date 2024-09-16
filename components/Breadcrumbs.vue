@@ -7,7 +7,7 @@
         :class="{'border-blue-300': index === active}">
         <LinkItem :locale="locale" :cg="'cg_name'" :index="index" :item="item" :lastIndex="tree.length - 1" />
       </div>
-      <p class="mx-1 cursor-default" :class="{hidden: index === tree.length - 1}">
+      <p class="mx-1 cursor-default">
         <svg fill="#000000" height="12px" width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330">
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -19,14 +19,28 @@
         </svg>
       </p>
     </div>
+
+    <div class="flex flex-col gap-1">
+      <div v-for="(item, index) in treeChildren" :key="item.id">
+        <div
+          @click="(active = index + tree.length), $emit('active', active)"
+          class="cursor-pointer border rounded-lg py-1 px-2 hover:border-blue-500"
+          :class="{'border-blue-300': index + tree.length === active}">
+          <LinkItem :locale="locale" :cg="'cg_name'" :index="index" :item="item" :lastIndex="tree.length - 1" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
 import {ref} from 'vue';
+
 const props = defineProps({
   locale: String,
   tree: Array,
+  treeChildren: Array,
 });
+
 const emits = defineEmits(['active']);
 const active = ref(props.tree.length - 1);
 </script>
